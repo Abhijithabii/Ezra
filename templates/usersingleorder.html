@@ -1,0 +1,156 @@
+{% extends 'userprofile.html' %}
+{% load static %}
+{% block profile %}
+
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card shadow">
+          <div class="card-header">
+            <h3>View order</h3>
+            <a href="{% url 'usertotalorderview' %}" class="btn-3 float-end">
+              <i class="fa fa-reply"></i> Back</a
+            >
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <h4>Shipping Details</h4>
+                <hr />
+                <label class="mt-2"> Name</label>
+                <div class="border p-1">
+                  {{order.address.firstname}}
+                </div>
+  
+                <label class="mt-2">Email</label>
+                <div class="border p-1">{{order.address.email}}</div>
+                <label class="mt-2">Phone Number</label>
+                <div class="border p-1">{{order.address.phone}}</div>
+                <label class="mt-2">Delivery Address</label>
+                <div class="border p-1">
+                  {{order.address.address_line_1}},{{order.address.address_line_2}} <br />
+                  {{order.address.city}},{{order.address.state}}<br/>{{order.address.pincode}}
+  
+                </div>
+              </div>
+              <div class="col-md-6">
+                <h4>Order Details</h4>
+                <table class="table table-borderless">
+                  <thead class="text-muted">
+                    <tr class="small text-uppercase">
+                      <th scope="col">Product</th>
+                      <th scope="col">Quantity</th>
+                      <th scope="col">Price</th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for item in orderitems %}
+                    <tr>
+                      <td>
+                        <figure class="itemside align-items-center">
+                          <div class="how-itemcart1">
+                            <img src="{{item.product.productimage_set.first.images.url}}" style="height:80px" alt="">
+                            <p>{{item.product.name}},<br> {{item.varient.varientname}}</p>
+                           
+                          </div>
+                        </figure>
+                      </td>
+                      <td class="column">
+                        <label class="my-3" for="">{{ item.quantity }}</label>
+                      </td>
+                      <td>
+                        <div class="price-wrap">
+                          <var class="price">₹{{ item.product_price }}</var><br />
+                          <small class="text-muted">
+                            ₹{{ item.product.price}} each
+                          </small>
+                        </div>
+                        <!-- price-wrap .// -->
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                <hr />
+                <div>
+                  <h5 class="d-flex align-end">
+                    Total : ₹{{order.order_total}}
+                  <br />
+                  {% comment %} {% if userCoupon_set.coupon.code %} {% endcomment %}
+                  Coupon Applied : {{userCoupon_set.coupon.code}}
+                  {% comment %} {% else %}
+                  Coupon : None
+                  {% endif %} {% endcomment %}
+                  <br />
+                  Grand Total: ₹{{order.paid_amount}}
+                  <br />
+                  </h5>
+                  <br />
+                  <h6>Payment Mode : {{order.payment.payment_method}}</h6>
+                  <br />
+                  {% if order.status == 'Cancelled' %}
+                  <h6>
+                    Order Status:
+                    <span class="text-danger">{{order.status}}</span>
+                  </h6>
+                  <br />
+                  {% elif order.status == 'Pending' %}
+                  <h6>
+                    Order Status:
+                    <span class="text-warning">{{order.status}}</span>
+                  </h6>
+                  <br />
+                  {% elif order.status == 'Returned' %}
+                  <h6>
+                    Order Status:
+                    <span class="text-warning">{{order.status}}</span>
+                  </h6>
+                  <br />
+                  {% else %}
+                  <h6>
+                    Order Status:
+                    <span class="text-success">{{order.status}}</span>
+                  </h6>
+                  <br />
+                  {% endif %}
+                  <h6>Tracking Number : {{order.order_number}}</h6>
+                  <br />
+                  <h6>Payment ID : {{order.payment.payment_id}}</h6>
+                  <br />
+                  {% if order.status == 'Delivered' %}
+                  <a href="{% url 'returnorder' order.id %}" class="btn btn-danger btn-sm" role="button" aria-disabled="true">Return</a>
+
+                  {% elif order.status != 'Cancelled'  %}
+                  <a href="{% url 'cancelorder' order.id %}" type="button" class="btn btn-danger btn-sm">Cancel Order</a>
+                  {% comment %} <h6><form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="order_id" value="{{ order.id }}">
+                    <button type="submit" class="btn btn-danger btn-sm">Cancel Order</button>
+                </form></h6> {% endcomment %}
+                {% else %}
+                <a href="#" class="btn btn-secondary btn-sm disabled" role="button" aria-disabled="true">Cancelled</a>
+                
+                {% comment %} <h6 class="mt-3 font-weight-bold">Refund ID : {{order.payment.refund_id}}</h6> {% endcomment %}
+                {% endif %}
+                
+                </div>
+                {% comment %} <div class="d-flex justify-content-end">
+                  {% if order.status != 'Cancelled' %}
+                  <a href="{ url 'order_management:cancel_order' order.id %}"
+                    ><button class="btn btn-danger" id ="refundButton">Cancel Order</button></a
+                  >
+  
+                  {% endif %}
+                </div> {% endcomment %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+
+{% endblock %}

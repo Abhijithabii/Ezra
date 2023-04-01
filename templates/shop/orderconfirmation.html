@@ -1,0 +1,146 @@
+{% extends 'home.html' %}
+{% load static %}
+{% block banner %}
+
+  <!-- breadcrumb start-->
+  <section class="breadcrumb breadcrumb_bg">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="breadcrumb_iner">
+            <div class="breadcrumb_iner_item">
+              <h2>Order Confirmation Page</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- breadcrumb start-->
+
+{% endblock banner %}
+
+
+{% block bodies %}
+<form action="{% url 'ordersuccess' %}" method='POST'>
+  {% csrf_token %}
+<section class="confirmation_part padding_top">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="confirmation_tittle">
+        <h3 style="color: rgb(0, 255, 34);">Confirm Your Order</h3>  
+        </div>
+      </div>
+      <div class="col-lg-12 col-lx-4">
+        <div class="single_confirmation_details">
+          <h4>Billing Address:</h4>
+          <p><span>Name :</span>  {{ addressSelected.firstname}} {{ addressSelected.lastname}}</p>
+          <p><span>Address :</span>  {{ addressSelected.address_line_1}}</p>
+          <p><span>Landmark :</span>  {{ addressSelected.address_line_2}}</p>
+          <p><span>Email :</span>  {{ addressSelected.email}}</p>
+          <p><span>Phone :</span>  {{ addressSelected.phone}}</p>
+          <p><span>City :</span>  {{ addressSelected.city}}</p>
+          <p><span>State :</span>  {{ addressSelected.state}}</p>
+          <p><span>Pincode :</span>  {{ addressSelected.pincode}}</p>
+          <p><span><strong> Payment Method :</strong></span>  {{ payment_method }}</p>
+        </div>
+      </div>
+      <div class="col-lg-6 col-lx-4">
+        
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="order_details_iner">
+          <h3>Order Details</h3>
+          <table class="table table-borderless">
+            <thead>
+              <tr>
+                <th scope="col" colspan="2">Product</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price</th>
+                <th></th>
+                <th></th>
+               
+                <th scope="col">Total Price</th>
+              </tr>
+            </thead>
+            
+            <tbody>
+            {% for t in cart_items %}
+              
+              <tr>
+                <th>{{t.product.name}}, {{ t.varient.varientname}}<br></th>
+                <th></th>
+                <th>X{{t.quantity}}</th>
+                <th colspan="2"><span>${{t.product.price}}</span></th>
+                <th></th>
+                <th> <span>{{t.price}}</span></th>
+              </tr>
+              {% endfor %}
+              <tr>
+                <th colspan="6"><strong> Subtotal</strong></th>
+                <th><span>${{ subtotal }}</span></th>
+              </tr>
+              <tr>
+              
+                <th colspan="6"><strong>shipping</strong> </th>
+                <th><span> $70.00</span></th>
+              </tr>
+              
+             <tr>
+                <th colspan="6"><strong> Coupon Discount</strong></th>
+                <th><span>${{coupon_discount}}</span></th>
+              </tr>
+              
+            </tbody>
+            <tfoot>
+              
+              <tr>
+                <th colspan="6"><strong>total</strong> </th>
+                <th scope="col"><strong>${{amountToBePaid}}</strong></th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+       <input type="hidden" class="form-control"  value="{{addressSelected.id}}" name="addressSelected"/>
+			 <input type="hidden" class="form-control" value="{{addressSelected.firstname}}" name="first_name"placeholder="First Name"required />
+			 <input type="hidden" class="form-control" id="last"value="{{addressSelected.lastname}}" name="last_name"placeholder="Last Name" required/>
+			 <input type="hidden" class="form-control" id="phone"value="{{addressSelected.phone}}" name="phone"placeholder="Phone Number"required/>
+			 <input type="hidden" class="form-control" id="email"value="{{addressSelected.email}}" name="email"placeholder="Email" required/>
+			 <input type="hidden" class="form-control" id="add1" value="{{addressSelected.address_line_1}}" name="address_line_1" placeholder="Address 1"required/>
+			 <input type="hidden" class="form-control" id="city" value="{{addressSelected.city}}" name="city"placeholder="City" required/>
+			 <input type="hidden" class="form-control" id="state" value="{{addressSelected.state}}" name="state"placeholder="State" required/>
+			 <input type="hidden" class="form-control" id="zip_code" name="pincode"value="{{addressSelected.pincode}}" placeholder="Postcode/ZIP" required/>
+			 <!-- Coupon Related Fields -->
+			 <input type="hidden" class="form-control" value="{{total}}" name="total" required/>
+			 <input type="hidden" class="form-control" value="{{grand_total}}" name="grand_total" required/>
+			 <input type="hidden" class="form-control" value="{{amountToBePaid}}" name="amountToBePaid" required/>
+			 <input type="hidden" class="form-control" id="couponCode" value="{{couponCode}}" name="couponCode" required/>
+			 <input type="hidden" class="form-control" value="{{coupon_discount}}" name="couponDiscount" required/>
+			<!-- Cod Related Fields -->
+			 {% comment %} <input type="hidden" value="COD"name="payment_method"> {% endcomment %}
+
+      <div class="d-flex justify-content-center align-items-center ml-auto">
+        {% if payment_method == 'COD' %}
+      <button type="submit" value="submit" class="btn_3 my-5 mr-5">Proceed Cash</button>&nbsp&nbsp&nbsp
+      <input type="hidden" value="COD" name="payment_method">
+      {% else %}
+      <button type="button" id="payWithRazorpay"  class="btn_3 my-5 mr-5">Proceed Raz</button>	
+      {% endif %}		
+      </div>
+        {% comment %} <a class="btn_3 my-5" href="#">Proceed</a> {% endcomment %}
+    </div>
+  </div>
+</section>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="{% static 'js/checkout.js' %}"></script>
+{% endblock %}

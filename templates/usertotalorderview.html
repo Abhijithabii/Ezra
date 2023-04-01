@@ -1,0 +1,98 @@
+{% extends 'userprofile.html' %}
+{% load static %}
+{% block profile %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card shadow">
+        <div class="card-header">
+          {%if orders%}
+          <table class="table table-borderless">
+            <thead class="text-muted">
+              <tr class="small text-uppercase">
+                <th scope="col">order date</th>
+                <th scope="col">Tracking Number</th>
+                <th scope="col">Total Price</th>
+                {% comment %} <th scope="col">Payment ID</th> {% endcomment %}
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for item in page_obj %}
+              <tr>
+                <td>{{ item.created_at }}</td>
+                <td>{{ item.order_number }}</td>
+                <td>₹ {{ item.paid_amount }}</td>
+                {% comment %} <td>
+                {{ item.payment.payment_id }}
+                </td> {% endcomment %}
+                {% if item.status == 'Cancelled' %}
+                <td class="text-danger"><b>{{ item.status }}</b></td>
+                {% else %}
+                <td class="text-success fw-bold">
+                  <b>{{ item.status }}</b>
+                </td>
+                {% endif %}
+
+                <td>
+                  <a href="{% url 'usersingleorderview' item.id %}"class="btn btn-dark">View</a >
+                </td>
+              </tr>
+
+              {% endfor %}
+
+              
+            </tbody>
+          </table>
+          {%else%}
+            <div>
+              <h2 class="text-center my-5">Your order history is empty</h2>
+              <div class="text-center">
+                <a class="btn_1" href="{% url 'userproduct' 0 %}">Continue shopping..</a>
+              </div>
+            </div>
+          {%endif%}
+
+          <div class="col-lg-12 ">
+            <div class="pagination justify-content-center">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                                    <i class="ti-angle-left"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% for page in page_obj.paginator.page_range %}
+                            {% if page_obj.number == page %}
+                                <li class="page-item active"><a class="page-link" href="#">{{ page }}</a></li>
+                            {% elif page > page_obj.number|add:'-3' and page < page_obj.number|add:'3' %}
+                                <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                                    <i class="ti-angle-right"></i>
+                                </a>
+                            </li>
+                           
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

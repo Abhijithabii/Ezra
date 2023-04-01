@@ -1,0 +1,247 @@
+{% extends 'home.html' %}
+{% load static %}
+{% block banner %}
+
+  <!-- breadcrumb start-->
+  <section class="breadcrumb breadcrumb_bg">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="breadcrumb_iner">
+            <div class="breadcrumb_iner_item">
+              <h2>Checkout Page</h2>
+              <p>Home <span>-</span>Checkout</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- breadcrumb start-->
+
+{% endblock banner %}
+
+
+{% block bodies %}
+
+  <!--================Checkout Area =================-->
+  <section class="checkout_area padding_top">
+    <div class="container">
+      <h3></h3>
+      <form id="post-form" method="POST">
+      {%csrf_token%}
+      <div class="cupon_area">
+        <div class="check_title">
+          <h2> Have a coupon </h2>
+        </div>
+        <input type="hidden" class="form-control"value="{{grand_total}}" name="grand_total" required/>
+        <input type="text" id="couponCode" name="couponCode" placeholder="Enter coupon code" />
+        <button type="submit" class="tp_btn">Apply Coupon</button>
+      </div>
+      </form>
+      <form id="coform"action="{% url 'orderconfirm' %}" method="POST">
+        {% csrf_token %}
+      <div class="billing_details">
+        <div class="row">
+          
+          <div class="col-lg-6">
+             <h4 class="font-weight-bold mt-0 mb-4">Select your Delivery Address</h4>
+            <header class="card-header mr-auto">
+              <a href="{% url 'add_address' 0 %}" class="btn btn-info" role="button">+ Add New Address</a>
+            </header> 
+           
+            {% for address in AllAddress %}
+            <div class="container">
+              <div class="card shadow my-2 col-">
+                <div class="card-body"> 
+                  <input type="radio" id="{{ address.id }}" name="selected_addresses" value="{{ address.id }}" form="coform" checked>
+                  <div class="container">      
+                    <p>{{ address.firstname }}  {{ address.lastname }},   {{ address.address_line_1 }},   {{ address.address_line_2 }}</p>
+                    <p>{{ address.phone }},{{ address.email }}</p>
+                    <p>{{ address.city }} , {{ address.state }}, {{ address.pincode }}</p>  
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}           
+          </div>
+          <div class="col-lg-6">
+            <div class="order_box">
+              <h2 class="text-center">Your Order</h2>
+              <ul class="list">
+                <li>
+                  <a href="#"><strong>Product</strong>
+                    <span><strong>quantity</strong></span>
+                  </a>
+                </li>
+                {% for cart_item in cart_items%}
+                <li>
+                  <a href="#"
+                    >{{cart_item.product.name}} <br>{{cart_item.provar.varientname}}
+        
+                    <span class="last">{{cart_item.quantity}}</span>
+                  </a>
+                </li>
+                {%endfor%}
+              </ul>
+              <ul class="list list_2">
+                <li>
+                  <a href="#"
+                    >Total
+                    <span>₹ {{subtotal}}</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#"
+                    >Shipping Charge
+                    <span>₹ 70</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#"
+                    >Grand Total
+                    <span> {{grand_total}}</span>
+                  </a>
+                </li>
+                {% if discount %}
+                <li>
+                  <span>
+                    Coupon Applied.
+                  </span>
+                </li>
+                <li>
+                  <a href="#"
+                    >Coupon Code : {{coupon.code}}
+                  </a>
+                </li>
+                <li>
+                  <a href="#"
+                    >Coupon Discount({{coupon.discount}}%)
+                    <span> -₹ {{coupon_discount}}</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#"
+                    >Payable Amount
+                    <span>{{amountToBePaid}}</span>
+                  </a>
+                </li>
+        
+                {%endif%}
+              </ul>
+            
+              <div class="form-check my-3">
+                <input class="form-check-input" type="radio" name="payment_method" value="COD" id="flexRadioDefault1"  form="coform" checked>
+                <label class="form-check-label" for="flexRadioDefault1">
+                  Cash on Delivery
+                </label>
+              </div>
+              
+              <div class="form-check my-2">
+                <input class="form-check-input" type="radio" name="payment_method" value="RAZORPAY" id="flexRadioDefault2" form="coform" >
+                <label class="form-check-label" for="flexRadioDefault2">
+                  Razor Pay
+                </label>
+              </div>
+              
+              {% comment %} <input type="hidden" name="selected_address_id" form="coform" value="{{ selected_address_id }}"> {% endcomment %}
+              <input type="hidden" class="form-control" name="subtotal" form="coform" value="{{ subtotal }}">
+              <input type="hidden" class="form-control" name="grand_total" form="coform" value="{{ grand_total }}">
+              <input type="hidden" class="form-control" name="amountToBePaid" form="coform" value="{{ amountToBePaid }}">
+              <input type="hidden" class="form-control" name="couponCode" form="coform" value="{{coupon.code}}">
+              <input type="hidden" class="form-control" name="coupon_discount" form="coform" value="{{ coupon_discount }}">
+              {% comment %} <input type="hidden" class="form-control" name="selected_payment_method" form="coform" value="{{ selected_payment_method }}"> {% endcomment %}
+              {% comment %} <input type="hidden" class="form-control" class="form-control" value="{{addressSelected.id}}" name="addressSelected" placeholder="First Name"required /> {% endcomment %}
+              <div class="text-center">
+                <button type ="submit" class="mx-auto btn_1" form="coform">  Proceed to Payment</button>
+              </div>
+            </div>
+          </div>
+        
+        </div>
+      
+      </div>
+    </form>
+    </div>
+  </section>
+
+{% comment %} <script type="text/javascript">
+  $(document).on('submit', '#post-form', function (e){
+    e.preventDefault();
+    $.ajax({
+      type: 'POST',
+      url: '{% url "checkout" %}',
+      data: {
+        couponCode: $('#couponCode').val(),
+        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+      },
+      success: function (data){
+        $("h3").html(data)
+      }
+    })
+  })
+
+</script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+ {% endcomment %}
+
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        
+        
+        
+        {% if msg %}
+        <script>
+          console.log("here");
+          swal("message", "{{msg}}", "info");
+        
+        </script>
+        {% endif %}
+          {% comment %} <div class="col-lg-4">
+            <div class="order_box">
+              <h2>Your Order</h2>
+              <ul class="list">
+                <li>
+                  <a>Product
+                    <span>Price</span>
+                  </a>
+                </li>
+                {% for cart_item in cart_items%}
+                <li>
+                  <a >{{cart_item.product.name}}
+                    <span class="middle">x {{cart_item.quantity}}</span>
+                    <span class="last">{{ cart_item.product.price}}</span>
+                  </a>
+                </li>
+                {% endfor %}
+                
+              </ul>
+              <ul class="list list_2">
+                <li>
+                  <a >Subtotal
+                    <span>{{subtotal}}</span>
+                  </a>
+                </li>
+                <li>
+                  <a >Shipping Charge
+                    <span> $70.00</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">Total
+                    <span>{{grand_total}}</span>
+                  </a>
+                </li>
+              </ul>
+              
+              
+              <br><br>
+              <a class="btn_3" href="#">Proceed</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--================End Checkout Area =================--> {% endcomment %}
+{% endblock bodies %}

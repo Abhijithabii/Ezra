@@ -1,0 +1,55 @@
+{% extends 'userprofile.html' %}
+{% load static %}
+{% block profile %}
+<form method="POST">
+    {% csrf_token %}
+<div class="container">
+    <div class="card shadow">
+        <div class="card-body"> 
+           <h5 class="p-2 text-danger" style="border-bottom: 2px solid orange;">Saved Addresses</h5>
+            <div class="container">
+                <a href="{% url 'add_address' 1 %}" class="btn btn-success my-4">Add Address</a>
+                {% for address in addresses %}
+                <div class="container">
+                    <div class="card shadow my-2 col-lg-6">
+        
+                        <div class="card-body"> 
+                            {% comment %} <input type="checkbox" name="selected_addresses" value="{{ address.id }}"> {% endcomment %}
+                            <div class="container">
+                                <p>{{ address.firstname }}  {{ address.lastname }}</p>
+                                <p>{{ address.phone }}</p>
+                                <p>{{ address.email }}</p>
+                                <p>{{ address.address_line_1 }}</p>
+                                <p>{{ address.address_line_2 }}</p>
+                                <p>{{ address.city }} , {{ address.state }}</p>  
+                                <p>{{ address.pincode }}</p>
+                                <a href="{% url 'edit_address' address.id %}" class="btn btn-info mt-5">Edit</a>
+                               <a href="{% url 'delete_address' address.id %}" class="btn btn-danger mt-5" onclick="confirmDelete(event)">Delete</a> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                
+                
+                {% comment %} <input type="submit" class="btn btn-danger mt-5"  value="Delete"> {% endcomment %}
+                
+
+   {% comment %} <a href="document.pdf" download>Download PDF</a> {% endcomment %}
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+
+<script>
+    function confirmDelete(event) {
+        event.preventDefault(); // prevent the link from redirecting immediately
+        alertify.confirm('Message', 'Are You Sure Want to Delete This', function(){
+            window.location.href = event.target.href; // redirect to the delete URL
+        }, function(){ 
+            alertify.error('Cancel')
+        });
+    }
+</script>
+{% endblock %}

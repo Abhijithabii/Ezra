@@ -1,0 +1,234 @@
+{% extends 'home.html' %}
+{% block banner %}
+
+
+  <!-- breadcrumb start-->
+  <section class="breadcrumb" style="background-image: url('https://m.media-amazon.com/images/I/8198zygblWL._SL1500_.jpg'); width:100%;height:400px;">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="breadcrumb_iner">
+            <div class="breadcrumb_iner_item">
+              <h2>Profile Page</h2>
+              <p>Home <span>-</span>profile</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- breadcrumb start-->
+
+
+{% endblock %}
+{% block bodies %}
+
+<div class="container mt-5 pt-5">
+    <div class="row mt-5">
+        <div class="col-lg-3 my-lg-0 my-md-1">
+            <div id="sidebar" class="bg-purple">
+                <div class="h4 text-white">My Profile</div>
+                <ul>
+                    <li>
+                        <a href="{% url 'userprofile' %}" class="text-decoration-none d-flex align-items-start">
+                            <div class="fas fa-box pt-2 me-3"></div>
+                            <div class="d-flex flex-column">
+                                <div class="link">My Account</div>
+                                <div class="link-desc">View My Account</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'usertotalorderview' %}" class="text-decoration-none d-flex align-items-start">
+                            <div class="fas fa-box-open pt-2 me-3"></div>
+                            <div class="d-flex flex-column">
+                                <div class="link">My Orders</div>
+                                <div class="link-desc">View & Manage orders and returns</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'useraddress' %}" class="text-decoration-none d-flex align-items-start">
+                            <div class="far fa-address-book pt-2 me-3"></div>
+                            <div class="d-flex flex-column">
+                                <div class="link">Address Book</div>
+                                <div class="link-desc">View & Manage Addresses</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'updateuserprofile' %}" class="text-decoration-none d-flex align-items-start">
+                            <div class="far fa-user pt-2 me-3"></div>
+                            <div class="d-flex flex-column">
+                                <div class="link">Update Profile</div>
+                                <div class="link-desc">Change your profile details</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'changepassword' %}" class="text-decoration-none d-flex align-items-start">
+                            <div class="fas fa-key pt-2 me-3"></div>
+                            <div class="d-flex flex-column">
+                                <div class="link">Change Password</div>
+                                <div class="link-desc">Change your Password</div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-9 my-lg-0 my-1">
+            {% block profile %}
+            <div id="main-content" class="bg-white border">
+                <div class="d-flex flex-column">
+                    {% if user.profile.image %}
+                        <img class="rounded-circle mt-5" width="150px" src="{{ user.profile.image.url }}"
+                        alt="{{ user.username }} profile picture">
+                    {% else %}
+                        <img class="rounded-circle mt-5" width="150px"
+                        src="http://tcap.pbworks.com/f/1435170280/myAvatar.png"
+                        alt="{{ user.username }} profile picture">
+                    {% endif %}
+                    <div class="h5">Hello :{{ request.user.first_name }}</div>
+                    <div>Logged in as: {{ request.user.username}}</div>
+                </div>
+                <div class="d-flex my-4 flex-wrap justify-content-between">
+                    <div class="box me-4 my-1 bg-light">
+                        <img src="https://www.freepnglogos.com/uploads/box-png/cardboard-box-brown-vector-graphic-pixabay-2.png"
+                            alt="">
+                        <div class="d-flex align-items-center mt-2">
+                            <div class="tag">Orders placed</div>
+                            <div class="ml-auto number">{{totalorder}}</div>
+                        </div>
+                    </div>
+                    <div class="box me-4 my-1 bg-light">
+                        <img src="https://www.freepnglogos.com/uploads/shopping-cart-png/shopping-cart-campus-recreation-university-nebraska-lincoln-30.png"
+                            alt="">
+                        <div class="d-flex align-items-center mt-2">
+                            <div class="tag">Items in Cart</div>
+                            <div class="ml-auto number">{{totalcart}}</div>
+                        </div>
+                    </div>
+                    <div class="box me-4 my-1 bg-light">
+                        <img src="https://www.freepnglogos.com/uploads/love-png/love-png-heart-symbol-wikipedia-11.png"
+                            alt="">
+                        <div class="d-flex align-items-center mt-2">
+                            <div class="tag">Items in Wishlist</div>
+                            <div class="ml-auto number">{{totalwishlist}}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-uppercase">My recent orders</div>
+                {% for order in orders %}
+                <div class="order my-3 bg-light">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="d-flex flex-column justify-content-between order-summary">
+                                <div class="d-flex align-items-center">
+                                    <div class="text-uppercase">Order No:{{order.order_number}}</div>
+                                    
+                                </div>
+                                <div class="blue-label ms-auto text-uppercase">{{order.payment.payment_method}}</div>
+                                <div class="fs-8">{{order.created_at}}</div>
+                                {% comment %} <div class="rating d-flex align-items-center pt-1">
+                                    <img src="https://www.freepnglogos.com/uploads/like-png/like-png-hand-thumb-sign-vector-graphic-pixabay-39.png"
+                                        alt=""><span class="px-2">Rating:</span>
+                                    <span class="fas fa-star"></span>
+                                    <span class="fas fa-star"></span>
+                                    <span class="fas fa-star"></span>
+                                    <span class="fas fa-star"></span>
+                                    <span class="far fa-star"></span>
+                                </div> {% endcomment %}
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="d-sm-flex align-items-sm-start justify-content-sm-between">
+                                <div class="status">Status : {{ order.status }}</div>
+                                <a href="{% url 'usersingleorderview' order.id %}"><div class="btn btn-primary text-uppercase">order info</div></a>
+                            </div>
+                            <div class="progressbar-track">
+                                <ul class="progressbar">
+                                    <li id="step-1" class="text-muted {% if order.status == 'Order Confirmed' or order.status == 'Shipped' or order.status == 'Out for delivery' or order.status == 'Delivered' %}green {% endif %} ">
+                                        <span class="fas fa-gift"></span>
+                                    </li>
+                                    <li id="step-2" class="text-muted {% if order.status == 'Order Confirmed' or order.status == 'Shipped' or order.status == 'Out for delivery' or order.status == 'Delivered' %}green {% endif %} ">
+                                        <span class="fas fa-check"></span>
+                                    </li>
+                                    <li id="step-3" class="text-muted {% if order.status == 'Shipped' or order.status == 'Out for delivery' or order.status == 'Delivered' %}green {% endif %} ">
+                                        <span class="fas fa-box"></span>
+                                    </li>
+                                    <li id="step-4" class="text-muted  {% if order.status == 'Shipped' or order.status == 'Out for delivery' or order.status == 'Delivered' %}green {% endif %} ">
+                                        <span class="fas fa-truck"></span>
+                                    </li>
+                                    <li id="step-5" class="text-muted {% if order.status == 'Delivered' %}green{% endif %}">
+                                        <span class="fas fa-box-open"></span>
+                                    </li>
+                                </ul>
+                                <div id="tracker"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% comment %} <div class="order my-3 bg-light">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="d-flex flex-column justify-content-between order-summary">
+                                <div class="d-flex align-items-center">
+                                    <div class="text-uppercase">Order #fur10001</div>
+                                    <div class="green-label ms-auto text-uppercase">cod</div>
+                                </div>
+                                <div class="fs-8">Products #03</div>
+                                <div class="fs-8">22 August, 2020 | 12:05 PM</div>
+                                <div class="rating d-flex align-items-center pt-1">
+                                    <img src="https://www.freepnglogos.com/uploads/like-png/like-png-hand-thumb-sign-vector-graphic-pixabay-39.png"
+                                        alt=""><span class="px-2">Rating:</span>
+                                    <span class="fas fa-star"></span>
+                                    <span class="fas fa-star"></span>
+                                    <span class="fas fa-star"></span>
+                                    <span class="fas fa-star"></span>
+                                    <span class="far fa-star"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="d-sm-flex align-items-sm-start justify-content-sm-between">
+                                <div class="status">Status : Delivered</div>
+                                <div class="btn btn-primary text-uppercase">order info</div>
+                            </div>
+                            <div class="progressbar-track">
+                                <ul class="progressbar">
+                                    <li id="step-1" class="text-muted green">
+                                        <span class="fas fa-gift"></span>
+                                    </li>
+                                    <li id="step-2" class="text-muted">
+                                        <span class="fas fa-check"></span>
+                                    </li>
+                                    <li id="step-3" class="text-muted">
+                                        <span class="fas fa-box"></span>
+                                    </li>
+                                    <li id="step-4" class="text-muted">
+                                        <span class="fas fa-truck"></span>
+                                    </li>
+                                    <li id="step-5" class="text-muted">
+                                        <span class="fas fa-box-open"></span>
+                                    </li>
+                                </ul>
+                                <div id="tracker"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>  {% endcomment %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+{% endblock %}
+{% block footer %}{% endblock %}

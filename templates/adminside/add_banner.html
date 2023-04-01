@@ -1,0 +1,41 @@
+{% extends 'adminside/admin_base.html' %}
+{% block main %}
+<div class="container">
+    <div class="card shadow col-lg-8">
+        <div class="card-body"> 
+          <h5 class="p-2 text-danger" style="border-bottom: 2px solid orange;">Add Banner</h5>
+            <div class="container-fluid">
+                <form method="POST" action=""  enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Title</label>
+                                <input type="text" name="title" class="form-control" placeholder="Banner Title" required>
+                            </div>
+                        </div>
+    
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Banner Image</label>
+                                <input type="file" name="image" class="form-control"  id="image-input"   style="width:100%;height:80px">
+                                <div id="image-preview" ></div>
+                            </div>
+                        </div>
+    
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea name="desc" class="form-control" placeholder="write description here" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="submit" value="Submit" class="m-2 px-3 btn btn-primary">
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

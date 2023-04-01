@@ -1,0 +1,115 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block banner %}{% endblock %}
+{% block bodies %}
+<!--================login_part Area =================-->
+<section class="login_part padding_top">
+  <div class="container">
+      <div class="row align-items-center">
+          <div class="col-lg-6 col-md-6">
+              <div class="login_part_text text-center">
+                  <div class="login_part_text_iner">
+                      <h2>New to our Shop?</h2>
+                      <p>Discover the ultimate home furnishing experience with EZRA Furnitures. Register now and get updates on our latest collections</p>
+                      <a href="{% url 'register'%}" class="btn_3">Create an Account</a>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-6 col-md-6">
+              <div class="login_part_form">
+                  <div class="login_part_form_iner">
+                      <h3>Welcome Back ! <br>
+                          Please Sign in now</h3>
+                      <form class="row contact_form" action="" method="POST" >
+                          {% csrf_token %}
+                          <div class="col-md-12 form-group p_star">
+                              <input type="text" class="form-control" id="username" name="username" value=""
+                                  placeholder="Email"required>
+                          </div>
+                          <div class="col-md-12 form-group p_star">
+                              <input type="password" class="form-control" id="password" name="password" value=""
+                                  placeholder="Password"required>
+                          </div>
+                          <div class="col-md-12 form-group">
+                              
+                              <button type="submit" value="submit" class="btn_3">
+                                  log in
+                              </button>
+                              <a class="lost_pass" href="{% url 'forgotpass'%}">forget password?</a>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+<!--================login_part end =================-->
+{% comment %} <section class="vh-100 gradient-custom mt-5 pt-5">
+<div class="col-lg-4 card shadow m-auto mt-5" id="signupform">
+  <div class="card-body">
+
+      <div class="container-fluid">                
+              <!-- Pills navs -->
+          
+            <!-- Pills navs -->
+            <h3 class="mb-4 mt-5 pb-2 pb-md-0 mb-md-5 text-center">LOG IN</h3>
+            <!-- Pills content -->
+            <div class="tab-content">
+              <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
+                <form method="POST" action="">
+                  {% csrf_token %}
+                  <div class="text-center mb-3">
+                    <br>
+            
+            
+                  <!-- Username input -->
+                  <div class="form-outline mb-4">
+                    <input type="text" name="username" id="loginName" placeholder="Email" class="form-control" required />
+                  </div>
+            
+                  <!-- Password input -->
+                  <div class="form-outline mb-4">
+                    <input type="password" name="password" id="loginPassword" placeholder="Password" class="form-control" required />
+                  </div>
+            
+                  <!-- 2 column grid layout -->
+                  <div class="row mb-4">
+                    <div class="col-md-6 d-flex justify-content-center">
+                      <!-- Checkbox -->
+                      <div class="form-check mb-3 mb-md-0">
+                        <input class="form-check-input" type="checkbox" value="" id="loginCheck" checked />
+                        <label class="form-check-label" for="loginCheck"> Remember me </label>
+                      </div>
+                    </div>
+            
+                    <div class="col-md-6 d-flex justify-content-center">
+                      <!-- Simple link -->
+                      <a href="{% url 'forgotpass' %}">Forgot password?</a>
+                    </div>
+                  </div>
+            
+                  <!-- Submit button -->
+                  <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+            
+                  <!-- Register buttons -->
+                  <div class="text-center">
+                    <p>Not a member? <a href="{% url 'register'%}">Register</a></p>
+                  </div>
+                </form>
+              </div>
+                
+              
+            </div>
+            <!-- Pills content -->
+      </div>
+  </div>
+</div>      
+</section> {% endcomment %}
+
+
+{% endblock %}
+{% block footer %}{% endblock %}
+
+

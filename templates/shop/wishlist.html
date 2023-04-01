@@ -1,0 +1,99 @@
+{% extends 'home.html' %}
+{% load static %}
+{% block banner %}
+
+  <!-- breadcrumb start-->
+  <section class="breadcrumb breadcrumb_bg">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="breadcrumb_iner">
+            <div class="breadcrumb_iner_item">
+              <h2>Wishlist Products</h2>
+              <p>Home <span>-</span>wishlist Products</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- breadcrumb start-->
+
+{% endblock banner %}
+
+
+{% block bodies %}
+<section class="cart_area padding_top">
+    <center>
+        <h3>Wish List</h3>
+    </center>
+    <div class="container">
+        {%if not witems%}
+            <h2 class="text-center">Your wish list is empty</h2>
+            <div class="text-center">
+                <a href="{%url 'userproduct' 0 %}">Continue shopping..</a>
+            </div>
+        {%else%}
+
+        <div class="cart_inner">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr style="height:2px;">
+                    <th scope="col">Product</th>
+                    <th scope="col">Price</th>
+                    <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for item in witems%}
+                    <tr>
+                    <td>
+                    <div class="media">
+                        <div class="d-flex">
+                          <a href="{% url 'singleproduct' item.provar.proname.id %}"><img style="height:71px"  src="{{item.provar.proname.productimage_set.first.images.url}}" alt=""/></a>
+                        </div>
+                        <div class="media-body">
+                            <p>{{item.provar.proname.name}}</p>
+                            <p>{{item.provar.varientname}}</p>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <h5>${{item.provar.proname.price}}</h5>
+                </td>
+                <td class="text-right">
+                        <a href="{% url 'addtocart' item.provar.id %}"><i class="fas fa-cart-plus"></i></a>
+
+
+                </td>
+                <td class="text-right">
+                  {% comment %} <form method="POST" action="{% url 'remove_from_wishlist' item.product.id  %}" >
+                    {% csrf_token %} {% endcomment %}
+                    <input name="_method" type="hidden" value="DELETE">
+                    <a href="{% url 'remove_from_wishlist' item.provar.id  %}" class="btn btn-danger fas fa-trash fa-lg btn-flat show_confirm" onclick="confirmDelete(event)" data-toggle="tooltip" title='Delete'></a>
+                {% comment %} </form> {% endcomment %}
+                </td>
+            </div>
+
+            </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+        </div>
+        {%endif%}
+    </div>
+</section>
+
+<script>
+  function confirmDelete(event) {
+      event.preventDefault(); // prevent the link from redirecting immediately
+      alertify.confirm('Message', 'Are You Sure Want to Delete This', function(){
+          window.location.href = event.target.href; // redirect to the delete URL
+      }, function(){ 
+          alertify.error('Cancel')
+      });
+  }
+</script>
+{% endblock bodies %}

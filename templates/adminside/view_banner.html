@@ -1,0 +1,49 @@
+{% extends 'adminside/admin_base.html' %}
+{% block main %}
+<div class="card shadow">
+    <div class="card-body">
+
+        <h5 class="p-2" style="border-bottom: 2px solid orange;">Banner</h5>
+        <div class="container-fluid">
+
+            <table class="table" id="mydata">
+                <thead>
+                    <tr>
+                        <th>Sl No</th>
+                        <th>Image</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for b in banner %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><img src="{{ b.image.url }}" style="width:100px"/><br></td>
+                            <td>{{ b.title }}</td>
+                            <td>{{ b.desc }}</td>
+                            <td>
+                                <a href="{% url 'editbanner' b.id %}" class="btn btn-primary">Edit</a>
+                                <a href="{% url 'deletebanner' b.id %}" class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+    <script>
+        function confirmDelete(event) {
+            event.preventDefault(); // prevent the link from redirecting immediately
+            alertify.confirm('Message', 'Are You Sure Want to Delete This', function(){
+                window.location.href = event.target.href; // redirect to the delete URL
+            }, function(){ 
+                alertify.error('Cancel')
+            });
+        }
+    </script>
+{% endblock %}

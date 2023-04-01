@@ -1,0 +1,380 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EZRA Furnitures</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/sidebar.css' %}">
+    <script src="{% static 'js/myjs.js' %}"></script>
+
+
+  
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+      
+
+    <!--alertify CSS -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+    <!-- Default theme -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+    <!-- Datatables style -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
+
+    <!--Chartjs CDN-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+
+
+
+    <style>
+        .delete-image-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 24px;
+            height: 24px;
+            background-color: red;
+            color: white;
+            font-size: 14px;
+            border-radius: 50%;
+            text-decoration: none;
+        }
+    </style>
+  
+    <style>
+        .image-preview-item {
+          position: relative;
+          display: inline-block;
+        }
+      
+        .image-preview-close {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 20px;
+          height: 20px;
+          padding: 0;
+          margin: 0;
+          border: none;
+          background-image: url('/path/to/close-button.png');
+          background-size: contain;
+          background-repeat: no-repeat;
+          cursor: pointer;
+        }
+      </style>
+
+  </head>
+
+  <body>
+          <!--vertical navbar start-->
+        <div class="vertical-nav bg-white" id="sidebar">
+            <div class="py-4 px-3 mb-1 bg-light">
+                <!--align media objects (like images or videos) together with content
+                To create a flexbox container and to transform direct children into flex items, use the d-flex class
+                -->
+                <p class="font-weight-bold text-uppercase px-3 small dashboard-text text-center">EZRA Furniture Shop</p>
+                <div class="media d-flex align-items-center">
+                    <img src="{% static 'image/useravatar.png' %}" width="80" height="80"
+                         class="mr-3 rounded-circle img-thumbnail shadow-sm">
+                    <div class="media-body">
+                        <h4 class="mb-0">Admin</h4>
+                        <p class="text-muted mb-0">{{request.user.email}}</p>
+                    </div>
+                </div>
+            </div>
+        
+         
+            <!--.flex-column to display the flex items vertically (on top of each other)-->
+            <ul class="nav flex-column bg-white">
+                <li class="nav-item">
+                    <a href="{% url 'admindashboard' %}" class="nav-link text-dark bg-light">
+                        <i class="fas fa-tachometer-alt fa-fw mr-3 text-primary"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <!--fa-fw class is used to set icons at a fixed width. This class is useful when different icon widths throw off alignment-->
+        
+         
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-dark bg-light" href="#"  type="button" data-bs-toggle="dropdown" aria-expanded="false" id="navbardrop">
+                        <i class="fas fa-chart-bar mr-3 text-primary fa-fw"></i> Furniture Category
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'add_categories' %}">Add Category</a>
+                        <a class="dropdown-item" href="{% url 'viewcategory' %}">View Category</a>
+                    </div>
+                </li>
+
+              
+         
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-dark bg-light" href="#" id="navbardrop" data-bs-toggle="dropdown">
+                        <i class="fas fa-chart-bar mr-3 text-primary fa-fw"></i> Manage Product</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'addproduct' %}">Add Product</a>
+                        <a class="dropdown-item" href="{% url 'viewproduct' %}">View Product</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-dark bg-light" href="#" id="navbardrop" data-bs-toggle="dropdown">
+                        <i class="fas fa-chart-bar mr-3 text-primary fa-fw"></i> Manage ProductVarient</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'addvarient' %}">Add Varient</a>
+                        <a class="dropdown-item" href="{% url 'viewvarient' %}">View Varient</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-dark bg-light" href="#" id="navbardrop" data-bs-toggle="dropdown">
+                        <i class="fas fa-chart-bar mr-3 text-primary fa-fw"></i> Manage Coupon</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'addcoupon' %}">Add coupon</a>
+                        <a class="dropdown-item" href="{% url 'viewcoupon' %}">View Coupon</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-dark bg-light" href="#" id="navbardrop" data-bs-toggle="dropdown">
+                        <i class="fas fa-chart-bar mr-3 text-primary fa-fw"></i> Manage banner</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'addbanner' %}">Add Banner</a>
+                        <a class="dropdown-item" href="{% url 'viewbanner' %}">View Banner</a>
+                    </div>
+                </li>
+        
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-dark bg-light" href="{% url 'manageuser' %}" id="navbardrop" data-bs-toggle="dropdown">
+                        <i class="fas fa-chart-bar mr-3 text-primary fa-fw"></i> Manage Users
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'manageuser' %}">View User</a>
+        
+         
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-dark bg-light" href="{% url 'manageorder' %}" id="navbardrop" data-bs-toggle="dropdown">
+                        <i class="fas fa-chart-bar mr-3 text-primary fa-fw"></i> Manage Orders
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'manageorder' %}">View orders</a>
+        
+         
+                    </div>
+                </li>
+                {% comment %} <li class="nav-item">
+                    <a href="" class="nav-link text-dark bg-light">
+                        <i class="fas fa-cog mr-3 text-primary fa-fw"></i>
+                        Manage Order
+                    </a>
+                </li> {% endcomment %}
+               <li class="nav-item">
+                    <a href="{% url 'salesreport' %}" class="nav-link text-dark bg-light">
+                        <i class="fas fa-cog mr-3 text-primary fa-fw"></i>
+                        Sales Report
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'adminlogout' %}" class="nav-link text-dark bg-light">
+                        <i class="fas fa-sign-out-alt mr-3 text-primary fa-fw"></i>
+                        Logout
+                    </a>
+                </li>
+        
+         
+            </ul>
+        </div>
+        <!--vertical navbar end-->
+        <!--page content holder-->
+        <div class="page-content p-4" id="content">
+            {% comment %} <a href="" title="logout" class="float-right text-white"><i class="fas fa-sign-out-alt fa-2x"></i></a> {% endcomment %}
+        
+         
+            {% comment %} <!--toggle btn-->
+            <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4">
+                <i class="fas fa-bars mr-2"></i>
+                <small class="text-uppercase font-weight-bold">Toggle</small>
+            </button>
+            <!--end toggle btn--> {% endcomment %}
+        
+            {% block main %}
+
+            {% endblock %}
+
+             
+            {% comment %} {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                     {% endfor %}
+                </ul>
+            {% endif %} {% endcomment %}
+        </div>
+        <!--end page content holder-->
+
+        <!-- message removing with timer js -->
+      {% comment %} <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script>
+          $(document).ready(function() {
+              setTimeout(function() {
+                  $('.alert').remove();
+              }, 3000); // 5000 milliseconds = 5 seconds
+          });
+      </script> {% endcomment %}
+      
+<!-- product adding time image preview js -->
+{% comment %} <script>
+    const imageInput = document.getElementById('image-input');
+    const imagePreview = document.getElementById('image-preview');
+  
+    imageInput.addEventListener('change', () => {
+      const files = imageInput.files;
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          const img = document.createElement('img');
+          img.src = reader.result;
+          img.style.marginRight = '10px'; // add margin between images
+          imagePreview.appendChild(img);
+        };
+      }
+    });
+  </script> {% endcomment %}
+
+  <script>
+    const imageInput = document.getElementById('image-input');
+    const imagePreview = document.getElementById('image-preview');
+    let displayedImages = []; // an array to keep track of the images currently displayed in the preview
+    
+    imageInput.addEventListener('change', () => {
+      const files = imageInput.files;
+      for (let i = 0; i <= files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          const img = document.createElement('img');
+          img.src = reader.result;
+          img.style.marginRight = '10px'; // add margin between images
+          const item = document.createElement('div');
+          item.classList.add('image-preview-item');
+          item.appendChild(img);
+          const closeBtn = document.createElement('button');
+          closeBtn.classList.add('image-preview-close');
+          closeBtn.addEventListener('click', () => {
+            displayedImages = displayedImages.filter(image => image !== item);
+            item.remove();
+            removeFileFromList(file); // remove the file from the FileList object
+            console.log(removeFileFromList)
+          });
+          item.appendChild(closeBtn);
+          imagePreview.appendChild(item);
+          displayedImages.push(item); // add the item to the displayedImages array
+          console.log(displayedImages)
+        };
+      }
+    });
+    
+    // helper function to remove a file from the FileList object
+    function removeFileFromList(file) {
+      const files = imageInput.files;
+      for (let i = 0; i <= files.length; i++) {
+        if (files[i] === file) {
+          // remove the file from the FileList object
+          const newFiles = new FileList();
+          for (let j = 0; j < files.length; j++) {
+            if (j !== i) {
+              newFiles.append(files[j]);
+              console.log(newFiles)
+            }
+          }
+          imageInput.files = newFiles;
+          break;
+        }
+      }
+    }
+    
+    // when the form is submitted, remove any images from the files array that are not currently displayed in the preview
+    document.getElementById('editform').addEventListener('submit', event => {
+      const files = imageInput.files;
+      const displayedFileNames = displayedImages.map(item => item.getElementsByTagName('img')[0].src);
+      const selectedFiles = [];
+      for (let i = 0; i <= files.length; i++) {
+        if (displayedFileNames.includes(URL.createObjectURL(files[i]))) {
+          selectedFiles.push(files[i]);
+          console.log(selectedFiles)
+        }
+      }
+      imageInput.files = new FileList(selectedFiles);
+      console.log(selectedFiles)
+    });
+    
+  </script>
+
+
+  
+
+  <!--datatables JavaScript and CDN -->
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+
+
+<script>
+    $(document).ready(function() {
+        $('#salesdata').DataTable( {
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        } );
+    } );
+
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#mydata').DataTable( {
+            dom: 'Bfrtip',
+            buttons: [
+             'print'
+            ]
+        } );
+    } );
+</script>
+
+    <!--Alertify JavaScript -->
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+
+    <script>
+        alertify.set('notifier','position', 'top-right');
+        {% for msg in messages %}
+            alertify.success('{{ msg }}');
+        {% endfor %}
+        
+    </script>
+
+
+{% comment %} <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script> {% endcomment %}
+
+
+
+    {% comment %} <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script> {% endcomment %}
+
+    {% comment %} <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> {% endcomment %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  </body>
+</html>

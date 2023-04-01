@@ -1,0 +1,246 @@
+{% extends 'home.html' %}
+{% load static %}
+{% block banner %}
+
+
+  <!-- breadcrumb start-->
+  <section class="breadcrumb breadcrumb_bg">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="breadcrumb_iner">
+            <div class="breadcrumb_iner_item">
+              <h2>Cart Products</h2>
+              <p>Home <span>-</span>Cart Products</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- breadcrumb start-->
+
+{% endblock banner %}
+
+
+{% block bodies %}
+{% comment %} <form class="row contact_form" action="{% url 'checkout' %}" method="POST" >
+  {% csrf_token %}
+<table class="table">
+  <thead>
+  <tr style="height:2px;">
+     
+  <th scope="col">Product</th>
+  <th scope="col">Price</th>
+  <th scope="col">Quantity</th>
+  <th scope="col">Total</th>
+  </tr>
+  </thead>
+
+  <tbody>
+    {% for item in cart_items %}
+     
+  <tr>
+  <td>
+
+  <div class="media">
+  <div class="d-flex">
+    <a href="{% url 'singleproduct' item.product.id %}"><img src="{{ item.product.productimage_set.first.images.url }}" alt="" style="height: 70px;"></a>
+  </div>
+  <div class="media-body">
+  <p>{{ item.product.name }}</p>
+  </div>
+  </div>
+  </td>
+  <td>
+  <h5>${{ item.product.price }}</h5>
+  </td>
+  <td>
+      <div class="product_count">
+
+          <a href="{% url 'removecartitem' item.product.id %}" class="input-number-decrement"> <i class="ti-angle-down"></i></a>
+          <input class="input-number" name="quantity" type="text" value="{{item.quantity}}" min="0" max="10">
+          <a href="{% url 'addcartitem' item.product.id %}" class="input-number-increment"> <i class="ti-angle-up"></i></a>
+      </div>
+      
+  </td>
+
+  <td>
+  <h5>{{ item.price }}</h5>
+  </td>
+
+   <td class="text-right">
+     <a href=" url 'remove_cart_products' cart_item.product.id %}"> <i class="fa fa-remove" style="font-size:30px;color:red"></i></a> 
+     
+  </td> 
+
+  </tr>
+  {% endfor %}
+
+ 
+  <td></td>
+  <td></td>
+  <td>
+      <br>
+  <h5>Total price 
+  <br>
+  <br>
+  <h5>Grand Total  </h5>
+  </td>
+  <td>
+      <br>
+  <h5>$ {{total}}</h5>
+  <br>
+  <hr>
+  <h5>$ {{grand_total}}</h5>
+  </td>
+  </tr>
+  </ul>
+  </div>
+  </td>
+  </tr>
+  </tbody>
+  </table> {% endcomment %}
+
+{% comment %} normal working {% endcomment %}
+
+
+<div class="container-fluid">   
+<section class="cart_area padding_top w-100">
+  <form class="row contact_form" action="{% url 'checkout' %}" method="POST" >
+  {% csrf_token %}
+  <div class="container">
+    {% if not cart_items %}
+    <h2 class="text-center">Your cart is empty</h2>
+            <div class="text-center">
+                <a href="{%url 'userproduct' 0 %}">Continue shopping..</a>
+            </div>
+            {% else %}
+    <div class="cart_inner">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Product</th>
+              <th scope="col">Price</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            {% for item in cart_items %}
+            <tr>
+              <td>
+                <div class="media cart_data">
+                  <div class="d-flex">
+                    <a href="{% url 'singleproduct' item.product.id %}"><img src="{{ item.product.productimage_set.first.images.url }}" alt="" style="height: 70px;"></a>
+                  </div>
+                  <div class="media-body">
+                    <p>{{ item.product.name }}</p>
+                    <p>{{ item.varient.varientname }}</p>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <h5>${{ item.product.price }}</h5>
+              </td>
+              {% if item.varient.varstock == 0 %}
+              <td><div class="product_count">
+                <a class="text-danger"> Currently, Out of Stock </a>
+                  </div>
+                  <td>
+                    <h5><del>{{ item.price }}</del></h5>
+                  </td>
+              </td>
+              {% else %}
+              <td>
+                <div class="product_count">
+                  <input type="hidden" class="prod_id" value="{{ item.product_id}}">
+                   <input type="hidden" class="varient_id" value="{{ item.varient_id}}">
+
+                  <a href="{% url 'removecartitem' item.product.id item.varient.id %}" ><span class="input-number-decrement"> <i class="ti-angle-down"></i></span></a>
+                  <input class="input-number quantity-input" name="quantity" type="text" value="{{item.quantity}}" min="0" max="100">
+                  <a href="{% url 'addcartitem' item.product.id item.varient.id %}"  > <span class="input-number-increment"> <i class="ti-angle-up"></i></span></a>
+                </div>
+                
+              </td>
+              <td>
+                <h5>{{ item.price }}</h5>
+              </td>
+              {% endif %}
+              <td>
+                <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                  <!-- Button trigger modal -->
+                  <a href="#" class="text-danger" data-toggle="modal" data-target="#confirm-delete-modal-{{ forloop.counter }}">
+                    <i class="fas fa-trash fa-lg"></i>
+                  </a>
+          
+                  <!-- Modal -->
+                  <div class="modal fade" id="confirm-delete-modal-{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="confirm-delete-modal-label" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">                  
+                          <h5 class="modal-title" id="confirm-delete-modal-label">Confirm Delete</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">                  
+                          Are you sure you want to delete this item?
+                        </div>
+                        <div class="modal-footer">                  
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                          <a href="{% url 'removecartproduct' item.product.id item.varient.id %}" class="btn btn-danger">Delete</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            
+            {% endfor %}
+            <tr class="bottom_button">
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+
+              <td></td>
+              <td>
+                <h5>Subtotal</h5>
+              </td>
+              <td>
+                <h5>₹{{total}}</h5>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+ <br><br><br>
+        <div class="checkout_btn_inner float-right">
+          <a class="btn_1" href="{% url 'userproduct' 0 %}">Continue Shopping</a>
+          {% if total > 0 %}
+          <button type ="submit" class="btn_1 checkout_btn_1"> Proceed to checkout </button>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+    </form>
+</section>
+<br><br><br>
+
+
+</div>
+
+
+
+{% endblock bodies %}
+
+

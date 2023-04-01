@@ -1,0 +1,132 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block banner %}
+  <!-- breadcrumb start-->
+  <section class="breadcrumb breadcrumb_bg">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="breadcrumb_iner">
+            <div class="breadcrumb_iner_item">
+              <h2>Shop Single</h2>
+              <p>Home <span>-</span> Shop Single</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- breadcrumb start-->
+  <!--================End Home Banner Area =================-->
+
+{% endblock %}
+{% block bodies %}
+  <!--================Single Product Area =================-->
+  <form action="{% url 'addtocart' prod.id %}" method="POST">
+    {% csrf_token %}
+  <div class="product_image_area section_padding ">
+    <div class="container">
+      <div class="row s_product_inner justify-content-between">
+        <div class="col-lg-7 col-xl-7">
+          <div class="product_slider_img">
+            <div id="vertical">
+              {% for i in images %}
+              <div data-thumb="{{i.images.url}}" style="max-width: 100%; max-height: 100%;">
+                <img class="big_img" src="{{i.images.url}}" style="max-width: 100%; max-height: 100%;" />
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-5 col-xl-4">
+          <div class="s_product_text">
+            <h3>{{prod.name}}</h3>
+            <h2>$ {{prod.price}}</h2>
+            <ul class="list">
+              <li>
+                <a class="active">
+                  <span>Category</span> : {{prod.category}}</a>
+              </li><br>
+            
+              <li><a class=" d-flex">
+                <span>Varient </span>:
+                
+                   <select id="wishlistoptions" class="form-select col-6" aria-label="Default select example" name="varient_id">
+                    <option class="varient_id">choose</option>
+                  
+                    {% for v in provar %}
+                  
+                  <option value="{{v.id}}">{{v.varientname}}</option>
+                  
+                  {% endfor %}
+                </select></a>
+      
+                
+                
+              </li>
+              {% comment %} {% if provar.varstock == 0 %}
+              <a class="text-danger"> <span>Availibility</span> : Out of Stock</a>
+            </li>
+            {% else %}
+              <li>
+                <a> <span>Availibility</span> : In Stock</a>
+              </li>
+              {% endif %} {% endcomment %}
+            </ul>
+            <p>{{prod.description}} </p>
+            
+{% comment %}             
+             <!--for adding cart using ajax-->
+             <input type="hidden" class="product_id" value="{{prod.id}}">
+             {% endcomment %}
+             
+           
+            <div class="card_area d-flex justify-content-center align-items-center">
+              <div class="product_count">
+                <span class="inumber-decrement"> <i class="ti-minus"></i></span>
+                <input class="input-number" type="text" name="quantity" id="product_qty" value="1" min="0" max="1000">
+                <span class="number-increment"> <i class="ti-plus"></i></span>
+              </div>
+              {% comment %} {% if prod.stock == 0 %}
+              <a>out of stock</a>
+              {% else %} {% endcomment %}
+              
+              <div id="choosedvarient">
+              </div>
+              
+            </div>
+         
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+  <!--================End Single Product Area =================-->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function(){
+    $('#wishlistoptions').change(function(){
+      var selectedwish = $(this).val();
+      console.log(selectedwish)
+      var product_id = {{prod.id}};
+      console.log(product_id)
+      $.ajax({
+        type: 'POST',
+        url: '/singleproduct/' + product_id + "/",
+        data: {'selectedwish':selectedwish,'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()},
+        success: function(response){
+          $("#choosedvarient").html(response.data)
+        }
+      });
+    });
+
+  });
+</script>
+
+
+
+{% endblock %}
+
+
