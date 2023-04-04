@@ -53,8 +53,6 @@
               class="fw-bold">Payment ID: </span>{{ order.payment.payment_id }}</li>
           <li class="text-muted"><i class="fa fa-circle" style="color:#40464c  ;"></i> <span
               class="fw-bold">Ordered Date: </span>{{order.created_at}}</li>
-          {% comment %} <li class="text-muted"><i class="fa fa-circle" style="color:#40464c  ;"></i> <span
-              class="me-1 fw-bold">Ordered From: </span>{{order.user.username}}</li> {% endcomment %}
         </ul>
       </div>
     </div>
@@ -72,9 +70,9 @@
             {% for item in orderitems %}
           <tr>
             <td>{{item.product.name}}, {{item.varient.varientname}}</td>
-            <td>₹ {{ item.product.price}}</td>
+            <td> {{ item.product.price}}</td>
             <td>{{ item.quantity}}</td>
-            <td>₹ {{ item.sub_total}}</td>
+            <td> {{ item.sub_total}}</td>
           </tr>
           {% endfor %}
         </tbody>
@@ -94,12 +92,6 @@
       </div>
     </div>
     <hr>
-    {% comment %} <div class="row">
-      <div class="col-xl-10">
-        <p>Thank you for purchasing from us.</p>
-      </div>
-
-    </div> {% endcomment %}
 
   </div>
 </div>

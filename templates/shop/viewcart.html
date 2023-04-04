@@ -143,7 +143,7 @@
                 </div>
               </td>
               <td>
-                <h5>${{ item.product.price }}</h5>
+                <h5>{{ item.product.price }}</h5>
               </td>
               {% if item.varient.varstock == 0 %}
               <td><div class="product_count">
@@ -159,9 +159,9 @@
                   <input type="hidden" class="prod_id" value="{{ item.product_id}}">
                    <input type="hidden" class="varient_id" value="{{ item.varient_id}}">
 
-                  <a href="{% url 'removecartitem' item.product.id item.varient.id %}" ><span class="input-number-decrement"> <i class="ti-angle-down"></i></span></a>
-                  <input class="input-number quantity-input" name="quantity" type="text" value="{{item.quantity}}" min="0" max="100">
-                  <a href="{% url 'addcartitem' item.product.id item.varient.id %}"  > <span class="input-number-increment"> <i class="ti-angle-up"></i></span></a>
+                  <a href="{% url 'removecartitem' item.product.id item.varient.id %}" > <i class="fas fa-minus"></i></span></a>
+                  <input class="input-number quantity-input" name="quantity" type="text" value="{{item.quantity}}" min="0" max="10">
+                  <a href="{% url 'addcartitem' item.product.id item.varient.id %}"  > <i class="fas fa-plus"></i></span></a>
                 </div>
                 
               </td>
@@ -216,7 +216,7 @@
                 <h5>Subtotal</h5>
               </td>
               <td>
-                <h5>₹{{total}}</h5>
+                <h5>{{total}}</h5>
               </td>
             </tr>
 

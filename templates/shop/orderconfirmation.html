@@ -74,24 +74,24 @@
                 <th>{{t.product.name}}, {{ t.varient.varientname}}<br></th>
                 <th></th>
                 <th>X{{t.quantity}}</th>
-                <th colspan="2"><span>${{t.product.price}}</span></th>
+                <th colspan="2"><span>{{t.product.price}}</span></th>
                 <th></th>
                 <th> <span>{{t.price}}</span></th>
               </tr>
               {% endfor %}
               <tr>
                 <th colspan="6"><strong> Subtotal</strong></th>
-                <th><span>${{ subtotal }}</span></th>
+                <th><span>{{ subtotal }}</span></th>
               </tr>
               <tr>
               
                 <th colspan="6"><strong>shipping</strong> </th>
-                <th><span> $70.00</span></th>
+                <th><span> 70.00</span></th>
               </tr>
               
              <tr>
                 <th colspan="6"><strong> Coupon Discount</strong></th>
-                <th><span>${{coupon_discount}}</span></th>
+                <th><span>{{coupon_discount}}</span></th>
               </tr>
               
             </tbody>
@@ -99,7 +99,7 @@
               
               <tr>
                 <th colspan="6"><strong>total</strong> </th>
-                <th scope="col"><strong>${{amountToBePaid}}</strong></th>
+                <th scope="col"><strong>{{amountToBePaid}}</strong></th>
               </tr>
             </tfoot>
           </table>
@@ -126,10 +126,10 @@
 
       <div class="d-flex justify-content-center align-items-center ml-auto">
         {% if payment_method == 'COD' %}
-      <button type="submit" value="submit" class="btn_3 my-5 mr-5">Proceed Cash</button>&nbsp&nbsp&nbsp
+      <button type="submit" value="submit" class="btn_3 my-5 mr-5">Proceed</button>&nbsp&nbsp&nbsp
       <input type="hidden" value="COD" name="payment_method">
       {% else %}
-      <button type="button" id="payWithRazorpay"  class="btn_3 my-5 mr-5">Proceed Raz</button>	
+      <button type="button" id="payWithRazorpay"  class="btn_3 my-5 mr-5">Proceed</button>	
       {% endif %}		
       </div>
         {% comment %} <a class="btn_3 my-5" href="#">Proceed</a> {% endcomment %}

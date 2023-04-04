@@ -23,8 +23,6 @@ import myproject.settings
 # Create your views here.
 
 def home(request):
-    # cart = CartItem.objects.filter(user=request.user)
-    # item_count = cart.count()
     product = Product.objects.all().order_by('-id')[:8]
     banner = Banner.objects.all()
     category = Category.objects.all()
