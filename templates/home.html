@@ -261,13 +261,8 @@
                             
                             <a href="{% url 'singleproduct' pro.id %}"><img src="{{pro.productimage_set.first.images.url }}" class="img-fluid" alt=""></a>
                             <div class="single_product_text">
-                                <h4>{{pro.name}}</h4>
-                                <h3>Rs. {{pro.price}}</h3>
-                                <ul class="d-flex  justify-content-between">
-                                    <li><a href="{% url 'singleproduct' pro.id %}"><i class="fa fa-eye"></i></a></li>
-                                    <li><a href="{% url 'add_to_wishlist' pro.id %}"><i class="fa fa-heart"></i></a></li>
-                                    <li><a href="{% url 'addtocart' pro.id %}"><i class="fa fa-shopping-cart"></i></a></li>
-                                </ul>
+                                <h4 class="text-center">{{pro.name}}</h4>
+                                <h3 class="text-center">Rs. {{pro.price}}</h3>
                             </div>
                            
                         </div>

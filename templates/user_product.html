@@ -78,17 +78,17 @@
                                 <a href="{% url 'singleproduct' j.id %}"> <img src="{{ j.productimage_set.first.images.url }}" class="img-fluid" alt=""></a>
                                 
                                 <div class="single_product_text">
-                                    <h4>{{ j.name }}</h4>
-                                    <h3> {{ j.price }}</h3>
-                                    <ul class="d-flex  justify-content-between">
+                                    <h4 class="text-center">{{ j.name }}</h4>
+                                    <h3 class="text-center"> {{ j.price }}</h3>
+                                    {% comment %} <ul class="d-flex  justify-content-between">
                                         <li><a href="{% url 'singleproduct' j.id %}"><i class="fa fa-eye"></i></a></li>
-                                        {% comment %} <li><a href="{% url 'add_to_wishlist' j.id %}"><i class="fa fa-heart"></i></a></li> {% endcomment %}
-                                        {% comment %} {% if j.stock == 0 %}
+                                        <li><a href="{% url 'add_to_wishlist' j.id %}"><i class="fa fa-heart"></i></a></li> 
+                                        {% if j.stock == 0 %}
                                         <li><a ><i class="">Out of Stock</i></li>
-                                        {% else %} {% endcomment %}
-                                        {% comment %} <li><a href="{% url 'addtocart' j.id %}"><i class="fa fa-shopping-cart"></i></li> {% endcomment %}
-                                        {% comment %} {% endif %} {% endcomment %}
-                                    </ul>
+                                        {% else %} 
+                                        <li><a href="{% url 'addtocart' j.id %}"><i class="fa fa-shopping-cart"></i></li> 
+                                        {% endif %} 
+                                    </ul> {% endcomment %}
                                     {% comment %} <a href="{% url 'singleproduct' j.id %}">view more</a>
                                     <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a> {% endcomment %}
                                 </div>
