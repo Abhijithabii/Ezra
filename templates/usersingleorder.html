@@ -120,7 +120,7 @@
                   <br />
                   {% if order.status == 'Delivered' %}
                   <a href="{% url 'returnorder' order.id %}" class="btn btn-danger btn-sm" role="button" aria-disabled="true">Return</a>
-
+                  {% elif order.status == 'Returned' %}
                   {% elif order.status != 'Cancelled'  %}
                   <a href="{% url 'cancelorder' order.id %}" type="button" class="btn btn-danger btn-sm">Cancel Order</a>
                   {% comment %} <h6><form method="POST">
@@ -128,6 +128,7 @@
                     <input type="hidden" name="order_id" value="{{ order.id }}">
                     <button type="submit" class="btn btn-danger btn-sm">Cancel Order</button>
                 </form></h6> {% endcomment %}
+                
                 {% else %}
                 <a href="#" class="btn btn-secondary btn-sm disabled" role="button" aria-disabled="true">Cancelled</a>
                 
