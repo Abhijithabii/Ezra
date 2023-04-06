@@ -145,25 +145,31 @@ def addtocart(request, varient_id):
 
 
 #working addcartitem
-@never_cache
-@login_required(login_url='login')
 def addcartitem(request,product_id,varient_id):
-        if request.user.is_authenticated:
-            current_user=request.user
-            product = get_object_or_404(Product, id=product_id)
-            varient= get_object_or_404(ProductVarient, id=varient_id)
-            item=CartItem.objects.get(user_id=current_user.id, product=product,provar=varient)
-            item.quantity = item.quantity + 1
-            if (varient.varstock>item.quantity):
-                item.save()
-                return redirect(viewcart)
-            else:
-                messages.warning(request,"Product Out Of Stock...! Can't be added to cart")
-                return redirect(viewcart)
-            
+    product = get_object_or_404(Product, id=product_id)
+    varient= get_object_or_404(ProductVarient, id=varient_id)
+    if request.user.is_authenticated:
+        current_user=request.user
+        item=CartItem.objects.get(user_id=current_user.id, product=product,provar=varient)
+        item.quantity = item.quantity + 1
+        if (varient.varstock>item.quantity):
+            item.save()
         else:
-            messages.success(request, 'Please log in to continue')
-            return redirect(viewcart)
+            messages.warning(request,"Product Out Of Stock...! Can't be added to cart")
+
+           
+            
+    else:
+        cart = request.session.get('cart', {})
+        item_id = f"{product.id}-{varient_id}"
+        cart[item_id]['quantity'] += 1
+        if (varient.varstock>cart[item_id]['quantity']):
+            request.session['cart'] = cart
+           
+        else:
+            messages.warning(request,"Product Out Of Stock...! Can't be added to cart")
+
+    return redirect(viewcart)
 
 
 #for checking ajax
@@ -190,26 +196,29 @@ def addcartitem(request,product_id,varient_id):
 
 
 
-@never_cache
-@login_required(login_url='login')
 def removecartitem(request,product_id,varient_id):
+    product = get_object_or_404(Product, id=product_id)
+    varient= get_object_or_404(ProductVarient, id=varient_id)
     if request.user.is_authenticated:
         current_user = request.user
-        product = get_object_or_404(Product, id=product_id)
-        varient= get_object_or_404(ProductVarient, id=varient_id)
-
-        cart_items = CartItem.objects.filter(user_id=current_user.id, product=product,provar=varient)
-        print(cart_items)
-        for cart_item in cart_items:
-            if cart_item.quantity == 1:
-                cart_item.delete()  # remove the item from the cart if the quantity is 1
-            else:
-                cart_item.quantity -= 1
-                cart_item.save()  # decrement the quantity by 1
+        cart_item = CartItem.objects.get(user_id=current_user.id, product=product,provar=varient)
+        print(cart_item)
+        if cart_item.quantity == 1:
+            cart_item.delete()  # remove the item from the cart if the quantity is 1
+        else:
+            cart_item.quantity -= 1
+            cart_item.save()  # decrement the quantity by 1
         return redirect(viewcart)
     else:
-            messages.success(request, 'Please log in to continue')
-            return redirect(viewcart)
+        cart = request.session.get('cart', {})
+        item_id = f"{product_id}-{varient_id}"
+        if cart[item_id]['quantity'] == 1:
+            del cart[item_id]
+        else:
+            cart[item_id]['quantity'] -= 1
+
+        request.session['cart'] = cart   
+        return redirect(viewcart)
 
 
 def removecartproduct(request, product_id, varient_id):
