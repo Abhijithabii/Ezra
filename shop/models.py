@@ -94,7 +94,6 @@ class Order(models.Model):
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
     refund_completed = models.BooleanField(default=False)
-    wallet_amt=models.FloatField(null=True,default=0)
     def __str__(self):
         return self.order_number
 
