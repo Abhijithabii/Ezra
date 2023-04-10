@@ -77,6 +77,7 @@ def register(request):
 
          # Create UserProfile object for the user
             UserProfile.objects.create(user=user)
+            Wallet.objects.create(user=user)
             
         # Save OTP to database
             user.profile.otp = otp
@@ -385,7 +386,7 @@ def userprofile(request):
     totalwishlist = wishlist.objects.filter(user=request.user).count()
     totalorder = Order.objects.filter(user=request.user).count()
     orders = Order.objects.filter(user=request.user).order_by('-id')[:2]
-    print(orders)
+    userwallet = Wallet.objects.get(user=request.user)
     
     return render(request, 'userprofile.html',locals())
 
