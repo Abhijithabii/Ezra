@@ -77,6 +77,7 @@ def register(request):
 
          # Create UserProfile object for the user
             UserProfile.objects.create(user=user)
+            Wallet.objects.create(user=user)
             
         # Save OTP to database
             user.profile.otp = otp
@@ -385,6 +386,7 @@ def userprofile(request):
     totalwishlist = wishlist.objects.filter(user=request.user).count()
     totalorder = Order.objects.filter(user=request.user).count()
     orders = Order.objects.filter(user=request.user).order_by('-id')[:2]
+    userwallet = Wallet.objects.get(user=request.user)
     print(orders)
     
     return render(request, 'userprofile.html',locals())
@@ -674,8 +676,18 @@ def search(request):
 @login_required(login_url='login')
 def return_order(request,id):
     order = Order.objects.get(id=id, user=request.user)
+    print(order,'return order')
+    userwallet = Wallet.objects.get(user=request.user)
+    if order.payment.payment_method == 'COD':
+        print('if in return order')
+        print(order.paid_amount)
+        userwallet.balance = userwallet.balance+order.paid_amount
+        print(userwallet.balance)
+        order.is_returned = True
     order.status = 'Returned'
     order.save()
+    userwallet.save()
+   
 
     orderitems = OrderProduct.objects.filter(order=order)
     context={

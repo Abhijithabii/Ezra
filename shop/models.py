@@ -124,3 +124,10 @@ class UserCoupon(models.Model):
     used = models.BooleanField(default = False)
     def __str__(self):
         return str(self.id)
+    
+
+class Wallet(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    balance = models.FloatField(default=0)
+    def __str__(self):
+        return self.user.first_name
