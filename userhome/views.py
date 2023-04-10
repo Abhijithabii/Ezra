@@ -386,8 +386,8 @@ def userprofile(request):
     totalwishlist = wishlist.objects.filter(user=request.user).count()
     totalorder = Order.objects.filter(user=request.user).count()
     orders = Order.objects.filter(user=request.user).order_by('-id')[:2]
-    userwallet = Wallet.objects.get(user=request.user)
-    print(orders)
+    if Wallet.objects.get(user=request.user):
+        userwallet = Wallet.objects.get(user=request.user)
     
     return render(request, 'userprofile.html',locals())
 
