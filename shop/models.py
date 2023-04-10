@@ -127,7 +127,7 @@ class UserCoupon(models.Model):
     
 
 class Wallet(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     balance = models.FloatField(default=0)
     def __str__(self):
         return self.user.first_name
