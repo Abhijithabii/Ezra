@@ -80,18 +80,40 @@
         <div class="col-lg-9 my-lg-0 my-1">
             {% block profile %}
             <div id="main-content" class="bg-white border">
-                <div class="d-flex flex-column">
-                    {% if user.profile.image %}
-                        <img class="rounded-circle mt-5" width="150px" src="{{ user.profile.image.url }}"
-                        alt="{{ user.username }} profile picture">
-                    {% else %}
-                        <img class="rounded-circle mt-5" width="150px"
-                        src="http://tcap.pbworks.com/f/1435170280/myAvatar.png"
-                        alt="{{ user.username }} profile picture">
-                    {% endif %}
-                    <div class="h5">Hello :{{ request.user.first_name }}</div>
-                    <div>Logged in as: {{ request.user.username}}</div>
+                <div class="col-12 d-flex">
+                    <div class="col-6">
+                        <div class="d-flex flex-column">
+                            {% if user.profile.image %}
+                                <img class="rounded-circle mt-5" width="150px" src="{{ user.profile.image.url }}"
+                                alt="{{ user.username }} profile picture">
+                            {% else %}
+                                <img class="rounded-circle mt-5" width="150px"
+                                src="http://tcap.pbworks.com/f/1435170280/myAvatar.png"
+                                alt="{{ user.username }} profile picture">
+                            {% endif %}
+                            <div class="h5">Hello :{{ request.user.first_name }}</div>
+                            <div>Logged in as: {{ request.user.username}}</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        {% if userwallet %}
+                        <div class="card mt-4">
+                            <div class="card-body text-center">
+                                <h5 class="card-title" style="border-bottom: 2px solid red ;">My Wallet</h5>
+                                <div class="row mb-4">
+                                  <p class="mb-0 my-auto"><strong>Current Balance:</strong></p>
+                                  {% if userwallet.balance %}
+                                  <h4 class="mx-auto my-auto">{{ userwallet.balance }}/-</h4>
+                                  {% else %}
+                                  <h4 class="mx-auto"> 0 /-</h4>
+                                  {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
                 </div>
+                
                 <div class="d-flex my-4 flex-wrap justify-content-between">
                     <div class="box me-4 my-1 bg-light">
                         <img src="https://www.freepnglogos.com/uploads/box-png/cardboard-box-brown-vector-graphic-pixabay-2.png"

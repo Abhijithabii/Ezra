@@ -674,8 +674,18 @@ def search(request):
 @login_required(login_url='login')
 def return_order(request,id):
     order = Order.objects.get(id=id, user=request.user)
+    print(order,'return order')
+    userwallet = Wallet.objects.get(user=request.user)
+    if order.payment.payment_method == 'COD':
+        print('if in return order')
+        print(order.paid_amount)
+        userwallet.balance = userwallet.balance+order.paid_amount
+        print(userwallet.balance)
+        order.is_returned = True
     order.status = 'Returned'
     order.save()
+    userwallet.save()
+   
 
     orderitems = OrderProduct.objects.filter(order=order)
     context={
