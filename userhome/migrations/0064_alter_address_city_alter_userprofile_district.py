@@ -7,7 +7,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('userhome', '0063_alter_address_city_alter_userprofile_district'),
-    ]
+    ]  
 
     operations = [
         migrations.AlterField(
