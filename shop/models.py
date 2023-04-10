@@ -29,7 +29,7 @@ class wishlist(models.Model):
     provar = models.ForeignKey(ProductVarient, on_delete=models.CASCADE,null=True)
 
     def __str__(self):
-        return self.product.name
+        return self.user.first_name
     
 
 
